@@ -13,7 +13,7 @@ import com.example.Auth.api.model.User;
 
 @RestController
 public class AuthController {
-    
+ 
     @PostMapping("/auth/register")
     public ResponseEntity<User> register(@RequestParam String email, String firstName, String lastName, String password) {
 
