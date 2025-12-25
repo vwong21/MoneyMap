@@ -22,9 +22,13 @@ public class AuthController {
     }
  
     @PostMapping("/auth/register")
-    public ResponseEntity<User> register(@RequestBody User user) {
-        service.register(user);
-        return ResponseEntity.status(200).body(user);
+    public ResponseEntity<?> register(@RequestBody User user) {
+         try {
+            service.register(user);
+            return ResponseEntity.ok(user);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 
     @PostMapping("/auth/login")

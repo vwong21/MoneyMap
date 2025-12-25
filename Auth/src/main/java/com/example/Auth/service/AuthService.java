@@ -16,6 +16,11 @@ public class AuthService {
 
     // register method
     public void register(User user) {
+        if (
+            user.getEmail() == null || user.getEmail().isBlank() || user.getFirstName() == null || user.getFirstName().isBlank() || user.getLastName() == null || user.getLastName().isBlank() || user.getPassword() == null || user.getPassword().isBlank()) {
+                throw  new IllegalArgumentException("All fields must be filled out.");
+            }
+        
         try {
             repo.register(user);
             System.out.println("Service call complete");
