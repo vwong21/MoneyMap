@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Database {
 
     private final String url;
@@ -12,7 +15,7 @@ public class Database {
     private final String password;
 
     public Database() {
-        url = "jdbc:postgresql://127.0.0.1:5432/postgres";
+        url = "jdbc:postgresql://127.0.0.1:5432/moneymap";
         user = "postgres";
         password = "7363";
     }
