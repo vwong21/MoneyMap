@@ -3,6 +3,8 @@ package com.example.Auth.database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+import javax.sql.DataSource;
+
 import org.springframework.stereotype.Repository;
 
 import com.example.Auth.api.model.User;
@@ -10,15 +12,15 @@ import com.example.Auth.api.model.User;
 @Repository
 public class AuthRepository {
     
-    private Database db;
+    private final DataSource datasource;
 
-    public AuthRepository(Database db) {
-        this.db = db;
+    public AuthRepository(DataSource datasource) {
+        this.datasource = datasource;
     }
 
     public void register(User user) {
         String sql = "INSERT INTO users (email, first_name, last_name, password) VALUES (?, ?, ?, ?)";
-        try (Connection conn = db.getConnection();
+        try (Connection conn = datasource.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql);
     ){
         stmt.setString(1, user.getEmail());
@@ -30,7 +32,7 @@ public class AuthRepository {
 
         System.out.println("Successfully added user to database");
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to register user", e);
         }
     }
 
