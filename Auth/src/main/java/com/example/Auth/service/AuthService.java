@@ -31,6 +31,25 @@ public class AuthService {
     }
 
     // login method
+    public boolean login(String email, String password) {
+        if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("All fields must be filled out.");
+        }
+        try {
+            User user = repo.login(email);
+            if (user == null) {
+                return false;
+            }
+            String repoPassword = user.getPassword();
+            if (password.equals(repoPassword)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (RuntimeException e) {
+            throw e;
+        }
+    }
 
     // getUser method
 
