@@ -39,17 +39,30 @@ public class AuthController {
 
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-
         try {
-            if (service.login(request.getEmail(), request.getPassword())) {
-                return ResponseEntity.ok(Map.of("message", "Login Successful"));
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid email or password"));
-            }
+            String token = service.login(request.getEmail(), request.getPassword());
+
+            return ResponseEntity.ok(
+                Map.of("token", token)
+            );
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", e.getMessage()));
+
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Invalid email or password"));
+
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", e.getMessage()));
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", e.getMessage()));
         }
     }
+
 
     @GetMapping("/users/me")
     public ResponseEntity<User> getUser(@RequestHeader("Authorization") String token) {

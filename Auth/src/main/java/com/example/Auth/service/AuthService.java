@@ -4,14 +4,17 @@ import org.springframework.stereotype.Service;
 
 import com.example.Auth.api.model.User;
 import com.example.Auth.database.AuthRepository;
+import com.example.Auth.security.JwtUtil;
 
 @Service
 public class AuthService {
     
     private final AuthRepository repo;
+    private final JwtUtil jwtUtil;
 
-    public AuthService(AuthRepository repo) {
+    public AuthService(AuthRepository repo, JwtUtil jwtUtil) {
         this.repo = repo;
+        this.jwtUtil = jwtUtil;
     }
 
     // register method
@@ -31,21 +34,20 @@ public class AuthService {
     }
 
     // login method
-    public boolean login(String email, String password) {
+    public String login(String email, String password) {
         if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             throw new IllegalArgumentException("All fields must be filled out.");
         }
         try {
             User user = repo.login(email);
-            if (user == null) {
-                return false;
-            }
             String repoPassword = user.getPassword();
-            if (password.equals(repoPassword)) {
-                return true;
-            } else {
-                return false;
+            if (user == null || !password.equals(repoPassword)) {
+                throw new RuntimeException("Invalid credentials");
             }
+
+            return jwtUtil.generateToken(user.getId());
+
+
         } catch (RuntimeException e) {
             throw e;
         }

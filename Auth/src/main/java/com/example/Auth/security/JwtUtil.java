@@ -21,10 +21,15 @@ public class JwtUtil {
     private final long expirationMillis = 3600_000;
 
     public JwtUtil() throws Exception {
-        this.privateKey = (RSAPrivateKey) PemUtils.readPrivateKeyFromFile(
-                "src/main/resources/keys/private_key.pem", "RSA");
-        this.publicKey = (RSAPublicKey) PemUtils.readPublicKeyFromFile(
-                "src/main/resources/keys/public_key.pem", "RSA");
+         this.privateKey = (RSAPrivateKey) PemUtils.readPrivateKeyFromInputStream(
+                getClass().getClassLoader().getResourceAsStream("keys/private_key.pem"),
+                "RSA"
+        );
+
+        this.publicKey = (RSAPublicKey) PemUtils.readPublicKeyFromInputStream(
+                getClass().getClassLoader().getResourceAsStream("keys/public_key.pem"),
+                "RSA"
+        );
     }
 
     public String generateToken(UUID userId) {
