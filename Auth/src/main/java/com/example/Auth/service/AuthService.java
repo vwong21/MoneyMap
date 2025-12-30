@@ -1,5 +1,6 @@
 package com.example.Auth.service;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.Auth.api.model.User;
@@ -11,6 +12,7 @@ public class AuthService {
     
     private final AuthRepository repo;
     private final JwtUtil jwtUtil;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public AuthService(AuthRepository repo, JwtUtil jwtUtil) {
         this.repo = repo;
@@ -25,6 +27,7 @@ public class AuthService {
             }
         
         try {
+            user.setPassword(encoder.encode(user.getPassword()));
             repo.register(user);
             System.out.println("Service call complete");
         } catch (Exception e) {
@@ -40,8 +43,7 @@ public class AuthService {
         }
         try {
             User user = repo.login(email);
-            String repoPassword = user.getPassword();
-            if (user == null || !password.equals(repoPassword)) {
+            if (user == null || !encoder.matches(password, user.getPassword())) {
                 throw new RuntimeException("Invalid credentials");
             }
 
