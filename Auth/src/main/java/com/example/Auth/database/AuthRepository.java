@@ -1,6 +1,6 @@
-    package com.example.Auth.database;
+package com.example.Auth.database;
 
-    import java.sql.Connection;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.UUID;
