@@ -32,6 +32,7 @@ public class AuthService {
             System.out.println("Service call complete");
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
         
     }
