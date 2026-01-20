@@ -63,10 +63,35 @@ import com.example.Auth.api.model.User;
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to authenticate user", e);
-        }
+            }
         }
 
         // getUser method
+        public User getUser(UUID id) {
+            String sql = "SELECT * FROM users WHERE id = ?";
+            try (Connection conn = datasource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                stmt.setObject(1, id);
+                ResultSet rs = stmt.executeQuery();
+
+                if (rs.next()) {
+                    User user = new User();
+                    user.setId(UUID.fromString(rs.getString("id")));
+                    user.setEmail(rs.getString("email"));
+                    user.setFirstName(rs.getString("first_name"));
+                    user.setLastName(rs.getString("last_name"));
+                    user.setPassword(rs.getString("password"));
+
+                    return user;
+                }
+
+                return null;
+
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to get user", e);
+            }
+        }
 
         // putUser method
 

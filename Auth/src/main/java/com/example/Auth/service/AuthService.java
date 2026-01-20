@@ -1,8 +1,11 @@
 package com.example.Auth.service;
 
+import java.util.UUID;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.Auth.api.dto.UserResponse;
 import com.example.Auth.api.model.User;
 import com.example.Auth.database.AuthRepository;
 import com.example.Auth.security.JwtUtil;
@@ -57,6 +60,21 @@ public class AuthService {
     }
 
     // getUser method
+    public UserResponse getUser(UUID userId) {
+        User user = repo.getUser(userId);
+
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        // Map User -> UserResponse
+        return new UserResponse(
+            user.getId(),
+            user.getEmail(),
+            user.getFirstName(),
+            user.getLastName()
+        );
+    }
 
     // putUser method
 
