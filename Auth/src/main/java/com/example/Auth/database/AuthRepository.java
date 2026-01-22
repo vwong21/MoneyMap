@@ -93,7 +93,7 @@ import com.example.Auth.api.model.User;
             }
         }
 
-        // putUser method
+        // patchUser method
 
         // deleteUser method
     }

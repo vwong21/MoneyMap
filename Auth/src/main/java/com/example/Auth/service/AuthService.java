@@ -67,7 +67,6 @@ public class AuthService {
             throw new RuntimeException("User not found");
         }
 
-        // Map User -> UserResponse
         return new UserResponse(
             user.getId(),
             user.getEmail(),
@@ -76,7 +75,7 @@ public class AuthService {
         );
     }
 
-    // putUser method
+    // patchUser method
 
     // deleteUser method
 } 
