@@ -94,6 +94,45 @@ import com.example.Auth.api.model.User;
         }
 
         // patchUser method
+        public void updateEmail(UUID userId, String email) {
+            String sql = "UPDATE users SET email = ? WHERE id = ?";
+            try (Connection conn =  datasource.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.setObject(1, email);
+                    stmt.setObject(2, userId);
+                    
+                    stmt.executeUpdate();
+                    System.out.println("Successfully updated user email in database");
+                 } catch (Exception e) {
+                throw new RuntimeException("Failed to update user email", e);
+            }
+        }
+        public void updateFirstName(UUID userId, String firstName) {
+            String sql = "UPDATE users SET first_name = ? WHERE id = ?";
+            try (Connection conn =  datasource.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.setObject(1, firstName);
+                    stmt.setObject(2, userId);
+                    
+                    stmt.executeUpdate();
+                    System.out.println("Successfully updated user first_name in database");
+                 } catch (Exception e) {
+                throw new RuntimeException("Failed to update user first_name", e);
+            }
+        }
+        public void updateLastName(UUID userId, String lastName) {
+            String sql = "UPDATE users SET last_name = ? WHERE id = ?";
+            try (Connection conn =  datasource.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.setObject(1, lastName);
+                    stmt.setObject(2, userId);
+                    
+                    stmt.executeUpdate();
+                    System.out.println("Successfully updated user last_name in database");
+                 } catch (Exception e) {
+                throw new RuntimeException("Failed to update user last_name", e);
+            }
+        }
 
         // deleteUser method
     }

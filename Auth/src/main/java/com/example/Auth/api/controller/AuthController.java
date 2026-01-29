@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Auth.api.dto.LoginRequest;
+import com.example.Auth.api.dto.PatchRequest;
 import com.example.Auth.api.dto.UserResponse;
 import com.example.Auth.api.model.User;
 import com.example.Auth.service.AuthService;
@@ -80,9 +81,18 @@ public class AuthController {
     }
 
     @PatchMapping("/users/me")
-    public ResponseEntity<User> updateUser(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<UserResponse> updateUser(
+            Authentication authentication,
+            @RequestBody PatchRequest request
+    ) {
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-        return ResponseEntity.ok(new User());
+        UUID userId = (UUID) authentication.getPrincipal();
+        UserResponse user = service.updateUser(userId, request);
+
+        return ResponseEntity.ok(user);
     }
 
     @DeleteMapping("/users/me")

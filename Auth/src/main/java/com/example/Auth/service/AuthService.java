@@ -4,7 +4,9 @@ import java.util.UUID;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.example.Auth.api.dto.PatchRequest;
 import com.example.Auth.api.dto.UserResponse;
 import com.example.Auth.api.model.User;
 import com.example.Auth.database.AuthRepository;
@@ -76,6 +78,28 @@ public class AuthService {
     }
 
     // patchUser method
+    @Transactional
+    public UserResponse updateUser(UUID userId, PatchRequest request) {
+        if (request.getEmail() == null && request.getFirstName() == null && request.getLastName() == null) {
+        throw new IllegalArgumentException("At least one field must be provided");
+        }
+        try {
+            if (request.getEmail() != null) {
+            repo.updateEmail(userId, request.getEmail());
+            }
+            if (request.getFirstName() != null) {
+                repo.updateFirstName(userId, request.getFirstName());
+            }
+            if (request.getLastName() != null) {
+                repo.updateLastName(userId, request.getLastName());
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+        
+
+        return getUser(userId);
+    }
 
     // deleteUser method
 } 
