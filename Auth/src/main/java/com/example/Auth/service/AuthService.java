@@ -10,6 +10,7 @@ import com.example.Auth.api.dto.PatchRequest;
 import com.example.Auth.api.dto.UserResponse;
 import com.example.Auth.api.model.User;
 import com.example.Auth.database.AuthRepository;
+import com.example.Auth.exception.InvalidRequestException;
 import com.example.Auth.security.JwtUtil;
 
 @Service
@@ -28,17 +29,11 @@ public class AuthService {
     public void register(User user) {
         if (
             user.getEmail() == null || user.getEmail().isBlank() || user.getFirstName() == null || user.getFirstName().isBlank() || user.getLastName() == null || user.getLastName().isBlank() || user.getPassword() == null || user.getPassword().isBlank()) {
-                throw  new IllegalArgumentException("All fields must be filled out.");
+                throw  new InvalidRequestException("All fields must be filled out.");
             }
-        
-        try {
-            user.setPassword(encoder.encode(user.getPassword()));
-            repo.register(user);
-            System.out.println("Service call complete");
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
+
+        user.setPassword(encoder.encode(user.getPassword()));
+        repo.register(user);
         
     }
 

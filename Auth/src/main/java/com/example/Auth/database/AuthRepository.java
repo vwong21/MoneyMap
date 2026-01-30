@@ -3,6 +3,7 @@ package com.example.Auth.database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.UUID;
 
 import javax.sql.DataSource;
@@ -10,6 +11,7 @@ import javax.sql.DataSource;
 import org.springframework.stereotype.Repository;
 
 import com.example.Auth.api.model.User;
+import com.example.Auth.exception.ExistingUserException;
 
     @Repository
     public class AuthRepository {
@@ -34,9 +36,14 @@ import com.example.Auth.api.model.User;
             stmt.executeUpdate();
 
             System.out.println("Successfully added user to database");
-            } catch (Exception e) {
+            } catch (SQLException e) {
+            if ("23505".equals(e.getSQLState())) {
+                throw new ExistingUserException("Email already registered", e);
+            } else {
                 throw new RuntimeException("Failed to register user", e);
             }
+        }
+
         }
 
         // login method
