@@ -38,28 +38,11 @@ public class AuthController {
 
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        try {
-            String token = service.login(request.getEmail(), request.getPassword());
+        String token = service.login(request.getEmail(), request.getPassword());
 
-            return ResponseEntity.ok(
-                Map.of("token", token)
-            );
-
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("error", e.getMessage()));
-
-        } catch (RuntimeException e) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "Invalid email or password"));
-
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", e.getMessage()));
-        }
+        return ResponseEntity.ok(
+            Map.of("token", token)
+        );
     }
 
 

@@ -40,20 +40,17 @@ public class AuthService {
     // login method
     public String login(String email, String password) {
         if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-            throw new IllegalArgumentException("All fields must be filled out.");
+            throw new InvalidRequestException("All fields must be filled out.");
         }
-        try {
-            User user = repo.login(email);
-            if (user == null || !encoder.matches(password, user.getPassword())) {
-                throw new RuntimeException("Invalid credentials");
-            }
 
-            return jwtUtil.generateToken(user.getId());
-
-
-        } catch (RuntimeException e) {
-            throw e;
+        User user = repo.login(email);
+        if (user == null || !encoder.matches(password, user.getPassword())) {
+            throw new InvalidRequestException("Invalid credentials");
         }
+
+        return jwtUtil.generateToken(user.getId());
+
+
     }
 
     // getUser method
