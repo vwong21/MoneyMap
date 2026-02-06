@@ -114,6 +114,7 @@ import com.example.Auth.exception.ExistingUserException;
                 throw new RuntimeException("Failed to update user email", e);
             }
         }
+
         public void updateFirstName(UUID userId, String firstName) {
             String sql = "UPDATE users SET first_name = ? WHERE id = ?";
             try (Connection conn =  datasource.getConnection();
@@ -137,9 +138,22 @@ import com.example.Auth.exception.ExistingUserException;
                     stmt.executeUpdate();
                     System.out.println("Successfully updated user last_name in database");
                  } catch (Exception e) {
-                throw new RuntimeException("Failed to update user last_name", e);
+                    throw new RuntimeException("Failed to update user last_name", e);
             }
         }
 
         // deleteUser method
+        public UUID deleteUser(UUID userId) {
+            String sql = "DELETE FROM USERS WHERE id = ?";
+            try (Connection conn = datasource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.setObject(1, userId);
+
+                    stmt.executeUpdate();
+                    System.out.println("User has been successfully delted");
+                    return userId;
+                } catch (Exception e) {
+                    throw new RuntimeException("Failed to delete user", e);
+                }
+        }
     }

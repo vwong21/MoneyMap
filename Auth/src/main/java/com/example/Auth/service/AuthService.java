@@ -94,4 +94,7 @@ public class AuthService {
     }
 
     // deleteUser method
+    public UUID deleteUser(UUID userId) {
+        return repo.deleteUser(userId);
+    }
 } 
