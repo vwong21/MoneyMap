@@ -18,6 +18,7 @@ import com.example.Auth.api.dto.LoginRequest;
 import com.example.Auth.api.dto.PatchRequest;
 import com.example.Auth.api.dto.UserResponse;
 import com.example.Auth.api.model.User;
+import com.example.Auth.exception.UnauthorizedException;
 import com.example.Auth.service.AuthService;
 
 @RestController
@@ -64,7 +65,7 @@ public class AuthController {
             @RequestBody PatchRequest request
     ) {
         if (authentication == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new UnauthorizedException("Unauthorized user");
         }
 
         UUID userId = (UUID) authentication.getPrincipal();

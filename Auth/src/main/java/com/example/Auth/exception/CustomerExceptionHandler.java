@@ -32,4 +32,14 @@ public class CustomerExceptionHandler {
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = UnauthorizedException.class)
+    public ResponseEntity<?> handleUnauthorizedException(UnauthorizedException exception, WebRequest request) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("TimeStamp", new Date());
+        body.put("Message", exception.getMessage());
+        body.put("Path", request.getDescription(false)); 
+
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
+    }
 }
