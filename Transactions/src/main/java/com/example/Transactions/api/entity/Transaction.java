@@ -1,7 +1,8 @@
-package com.example.Transactions.api.model;
+package com.example.Transactions.api.entity;
 
 import java.sql.Date;
 import java.util.UUID;
+
 
 public class Transaction {
     private UUID id;

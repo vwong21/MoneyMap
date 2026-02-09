@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Transactions.api.dto.CreateTransactionRequest;
-import com.example.Transactions.api.model.Transaction;
+import com.example.Transactions.api.entity.Transaction;
 import com.example.Transactions.service.TransactionsService;
 
 @RestController
