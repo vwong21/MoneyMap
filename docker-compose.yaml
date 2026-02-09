@@ -16,6 +16,20 @@ services:
         depends_on:
             - db
 
+    transactions:
+        build:
+            context: ./Transactions
+            dockerfile: Dockerfile
+        restart: always
+        shm_size: 128mb
+        ports:
+            - "8081:8081"
+        environment:
+            SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/moneymap
+        depends_on:
+            - db
+            - auth
+
     db:
         image: postgres:16
         restart: always
