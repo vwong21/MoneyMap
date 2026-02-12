@@ -22,7 +22,7 @@ CREATE TABLE transactions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     amount DECIMAL NOT NULL,
-    date DATE NOT NULL,
+    created_at TIMESTAMP NOT NULL,
     description VARCHAR(255),
     category_id UUID REFERENCES categories(id) ON DELETE SET NULL
 );
@@ -33,6 +33,6 @@ CREATE TABLE budgets (
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     category_id UUID REFERENCES categories(id) ON DELETE SET NULL,
     amount DECIMAL NOT NULL,
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL
+    start_date TIMESTAMP NOT NULL,
+    end_date TIMESTAMP NOT NULL
 );

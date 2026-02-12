@@ -1,18 +1,40 @@
 package com.example.Transactions.api.entity;
 
-import java.sql.Date;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-
+@Entity
+@Table(name = "transactions")
 public class Transaction {
-    private UUID id;
+
+    @Id
+    private UUID id = UUID.randomUUID();
+
+    @Column(name = "user_id")
     private UUID userId;
-    private Float amount;
-    private Date createdAt;
+
+    @Column(name = "amount")
+    private BigDecimal amount;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name= "category_id")
     private UUID categoryId;
 
-    public Transaction(UUID id, UUID userId, Float amount, Date createdAt, String description, UUID categoryId) {
+    public Transaction() {
+
+    }
+
+    public Transaction(UUID id, UUID userId, BigDecimal amount, LocalDateTime createdAt, String description, UUID categoryId) {
         this.id = id;
         this.userId = userId;
         this.amount = amount;
@@ -40,20 +62,20 @@ public class Transaction {
     }
 
     // Amount
-    public Float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
     // CreatedAt
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
