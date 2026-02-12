@@ -9,10 +9,6 @@ import org.springframework.stereotype.Service;
 import com.example.Transactions.api.entity.Transaction;
 import com.example.Transactions.database.TransactionsRepo;
 
-
-
-
-
 @Service
 public class TransactionsService {
 
@@ -26,7 +22,6 @@ public class TransactionsService {
         LocalDateTime createdAt = LocalDateTime.now();
 
         Transaction transaction =  new Transaction(
-            null,
             userId,
             amount,
             createdAt,
