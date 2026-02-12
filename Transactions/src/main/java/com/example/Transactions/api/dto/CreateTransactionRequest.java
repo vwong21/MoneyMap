@@ -1,24 +1,25 @@
 package com.example.Transactions.api.dto;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class CreateTransactionRequest {
-    private Float amount;
+    private BigDecimal amount;
     private String description;
     private UUID categoryId;
 
-    public CreateTransactionRequest(Float amount, String description, UUID categoryId) {
+    public CreateTransactionRequest(BigDecimal amount, String description, UUID categoryId) {
         this.amount = amount;
         this.description = description;
         this.categoryId = categoryId;
     }
 
     // Amount
-    public Float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

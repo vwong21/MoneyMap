@@ -1,25 +1,12 @@
 package com.example.Transactions.database;
 
-import java.sql.Date;
 import java.util.UUID;
 
-import javax.sql.DataSource;
-
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-
+import com.example.Transactions.api.entity.Transaction;
 
 @Repository
-public class TransactionsRepo {
-    
-    private final DataSource datasource;
-
-    public TransactionsRepo(DataSource datasource) {
-        this.datasource = datasource;
-    }
-
-    // Create Transaction Method
-    public void createTransction(UUID id, UUID userId, Float amount, Date createdAd, String description, UUID categoryId) {
-        
-    }
+public interface TransactionsRepo extends JpaRepository<Transaction, UUID> {
 }

@@ -23,8 +23,11 @@ public class TransactionsController {
     
     @PostMapping("/transactions")
     public ResponseEntity<Transaction> createTransaction(@RequestBody CreateTransactionRequest request, Authentication authentication) {
+        
         UUID userID = (UUID) authentication.getPrincipal();
-        Transaction transaction = service.CreateTransaction(userID, request.getAmount(), request.getDescription(), request.getCategoryId());
+
+        Transaction transaction = service.createTransaction(userID, request.getAmount(), request.getDescription(), request.getCategoryId());
+
         return ResponseEntity.ok(transaction);
     }
 }
