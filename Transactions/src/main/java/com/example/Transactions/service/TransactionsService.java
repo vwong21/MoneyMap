@@ -20,11 +20,12 @@ public class TransactionsService {
         this.repo = transactionsRepo;
     }
     
-    public Transaction createTransaction(UUID userId, BigDecimal amount, String description, UUID categoryId) {
+    public Transaction createTransaction(UUID userId, String title, BigDecimal amount, String description, UUID categoryId) {
         LocalDateTime createdAt = LocalDateTime.now();
 
         Transaction transaction =  new Transaction(
             userId,
+            title,
             amount,
             createdAt,
             description,

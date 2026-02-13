@@ -4,14 +4,25 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public class CreateTransactionRequest {
+    private String title;
     private BigDecimal amount;
     private String description;
     private UUID categoryId;
 
-    public CreateTransactionRequest(BigDecimal amount, String description, UUID categoryId) {
+    public CreateTransactionRequest(String title, BigDecimal amount, String description, UUID categoryId) {
+        this.title = title;
         this.amount = amount;
         this.description = description;
         this.categoryId = categoryId;
+    }
+
+    // Title
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     // Amount

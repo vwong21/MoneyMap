@@ -29,7 +29,7 @@ public class TransactionsController {
         
         UUID userID = (UUID) authentication.getPrincipal();
 
-        Transaction transaction = service.createTransaction(userID, request.getAmount(), request.getDescription(), request.getCategoryId());
+        Transaction transaction = service.createTransaction(userID, request.getTitle(), request.getAmount(), request.getDescription(), request.getCategoryId());
 
         return ResponseEntity.ok(transaction);
     }

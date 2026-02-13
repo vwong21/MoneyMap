@@ -22,6 +22,9 @@ public class Transaction {
     @Column(name = "user_id")
     private UUID userId;
 
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "amount")
     private BigDecimal amount;
 
@@ -38,8 +41,9 @@ public class Transaction {
 
     }
 
-    public Transaction(UUID userId, BigDecimal amount, LocalDateTime createdAt, String description, UUID categoryId) {
+    public Transaction(UUID userId, String title, BigDecimal amount, LocalDateTime createdAt, String description, UUID categoryId) {
         this.userId = userId;
+        this.title = title;
         this.amount = amount;
         this.createdAt = createdAt;
         this.description = description;
@@ -62,6 +66,15 @@ public class Transaction {
 
     public void setUserId(UUID userId) {
         this.userId = userId;
+    }
+
+    // Title
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     // Amount
