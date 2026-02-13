@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +29,15 @@ public class TransactionsController {
         UUID userID = (UUID) authentication.getPrincipal();
 
         Transaction transaction = service.createTransaction(userID, request.getAmount(), request.getDescription(), request.getCategoryId());
+
+        return ResponseEntity.ok(transaction);
+    }
+
+    @GetMapping("/transactions/{transactionId}")
+    public ResponseEntity<Transaction> getTransaction(@PathVariable UUID transactionId, Authentication authentication) {
+        UUID userId = (UUID) authentication.getPrincipal();
+
+        Transaction transaction = service.getTransaction(transactionId, userId);
 
         return ResponseEntity.ok(transaction);
     }

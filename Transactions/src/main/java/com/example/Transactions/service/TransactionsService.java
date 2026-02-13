@@ -31,4 +31,14 @@ public class TransactionsService {
 
         return repo.save(transaction);
     }
+
+    public Transaction getTransaction(UUID transactionId, UUID userId) {
+        Transaction transaction = repo.findById(transactionId).orElseThrow(() -> new RuntimeException("Transaction not found"));
+
+        if (!transaction.getUserId().equals(userId)) {
+            throw new RuntimeException("Unauthorized access to transaction");
+        }
+
+        return transaction;
+    }
 }
