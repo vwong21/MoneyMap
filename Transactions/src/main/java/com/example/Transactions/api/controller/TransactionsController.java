@@ -1,6 +1,7 @@
 package com.example.Transactions.api.controller;
 
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -40,5 +41,12 @@ public class TransactionsController {
         Transaction transaction = service.getTransaction(transactionId, userId);
 
         return ResponseEntity.ok(transaction);
+    }
+
+    @GetMapping("/transactions")
+    public ResponseEntity<List<Transaction>> getTransactionForUser(Authentication authentication) {
+        UUID userId = (UUID) authentication.getPrincipal();
+        List<Transaction> transactions = service.getTransactionsForUser(userId);
+        return ResponseEntity.ok(transactions);   
     }
 }

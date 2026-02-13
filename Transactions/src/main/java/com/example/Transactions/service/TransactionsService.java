@@ -2,7 +2,9 @@ package com.example.Transactions.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -40,5 +42,11 @@ public class TransactionsService {
         }
 
         return transaction;
+    }
+
+    public List<Transaction> getTransactionsForUser(UUID userId) {
+        return repo.findAll().stream()
+            .filter(transaction -> transaction.getUserId().equals(userId))
+            .collect(Collectors.toList());
     }
 }
