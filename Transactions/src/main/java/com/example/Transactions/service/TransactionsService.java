@@ -3,6 +3,7 @@ package com.example.Transactions.service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -49,5 +50,16 @@ public class TransactionsService {
         return repo.findAll().stream()
             .filter(transaction -> transaction.getUserId().equals(userId))
             .collect(Collectors.toList());
+    }
+
+    public UUID deleteTransaction(UUID transactionId, UUID userId) {
+        Transaction transaction = repo.findById(transactionId).orElseThrow(() -> new RuntimeException("Transaction not found"));
+
+        if (!transaction.getUserId().equals(userId)) {
+            throw new RuntimeException("Unauthorized access to transaction");
+        }
+
+        repo.delete(transaction);
+        return transactionId;
     }
 }
