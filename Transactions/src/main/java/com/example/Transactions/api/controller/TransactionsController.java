@@ -1,6 +1,5 @@
 package com.example.Transactions.api.controller;
 
-
 import java.util.List;
 import java.util.UUID;
 
@@ -27,20 +26,15 @@ public class TransactionsController {
     
     @PostMapping("/transactions")
     public ResponseEntity<Transaction> createTransaction(@RequestBody CreateTransactionRequest request, Authentication authentication) {
-        
         UUID userID = (UUID) authentication.getPrincipal();
-
         Transaction transaction = service.createTransaction(userID, request.getTitle(), request.getAmount(), request.getDescription(), request.getCategoryId());
-
         return ResponseEntity.ok(transaction);
     }
 
     @GetMapping("/transactions/{transactionId}")
     public ResponseEntity<Transaction> getTransaction(@PathVariable UUID transactionId, Authentication authentication) {
         UUID userId = (UUID) authentication.getPrincipal();
-
         Transaction transaction = service.getTransaction(transactionId, userId);
-
         return ResponseEntity.ok(transaction);
     }
 
