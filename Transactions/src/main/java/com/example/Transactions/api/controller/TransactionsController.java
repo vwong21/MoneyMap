@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,5 +49,12 @@ public class TransactionsController {
         UUID userId = (UUID) authentication.getPrincipal();
         List<Transaction> transactions = service.getTransactionsForUser(userId);
         return ResponseEntity.ok(transactions);   
+    }
+
+    @DeleteMapping("transactions/{transactionId}")
+    public ResponseEntity<UUID> deleteTransaction(@PathVariable UUID transactionId, Authentication authentication) {
+        UUID userId = (UUID) authentication.getPrincipal();
+        UUID deletedTransaction = service.deleteTransaction(transactionId, userId);
+        return ResponseEntity.ok(deletedTransaction);
     }
 }
