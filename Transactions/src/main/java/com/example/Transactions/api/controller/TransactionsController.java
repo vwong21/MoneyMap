@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,5 +51,12 @@ public class TransactionsController {
         UUID userId = (UUID) authentication.getPrincipal();
         UUID deletedTransaction = service.deleteTransaction(transactionId, userId);
         return ResponseEntity.ok(deletedTransaction);
+    }
+
+    @PatchMapping("transactions/{transactionId}")
+    public ResponseEntity<Transaction> updateTransaction(@PathVariable UUID transactionId, Authentication authentication, @RequestBody CreateTransactionRequest transaction) {
+        UUID userId = (UUID) authentication.getPrincipal();
+        Transaction updatedTransaction = service.udpateTransaction(transactionId, userId, transaction.getTitle(), transaction.getAmount(), transaction.getDescription(), transaction.getCategoryId());
+        return ResponseEntity.ok(updatedTransaction);
     }
 }
