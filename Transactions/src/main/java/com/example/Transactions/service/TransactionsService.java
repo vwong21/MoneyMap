@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import com.example.Transactions.api.entity.Transaction;
 import com.example.Transactions.database.TransactionsRepo;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class TransactionsService {
 
@@ -60,5 +62,29 @@ public class TransactionsService {
 
         repo.delete(transaction);
         return transactionId;
+    }
+
+    @Transactional
+    public Transaction udpateTransaction(UUID transactionId, UUID userId, String title, BigDecimal amount, String description, UUID categoryId) {
+        Transaction transaction = repo.findById(transactionId).orElseThrow(() -> new RuntimeException("Transaction not found"));
+
+        if (!transaction.getUserId().equals(userId)) {
+            throw new RuntimeException("Unauthorized access to transaction");
+        }
+        
+        if (title != null) {
+            transaction.setTitle(title);
+        }
+        if (amount != null) {
+            transaction.setAmount(amount);
+        }
+        if (description != null) {
+            transaction.setDescription(description);
+        }
+        if (categoryId != null) {
+            transaction.setCategoryId(categoryId);
+        }
+        
+        return transaction;
     }
 }
