@@ -1,5 +1,9 @@
 package com.example.Categories.database;
 
-public class CategoriesRepo {
+import java.util.UUID;
+
+import com.example.Categories.api.entity.Category;
+
+public class CategoriesRepo extends JpaRepository<Category, UUID>{
     
 }
