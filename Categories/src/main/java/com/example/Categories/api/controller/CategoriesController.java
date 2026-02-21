@@ -17,6 +17,6 @@ public class CategoriesController {
     }
     @PostMapping("/categories")
     public void createCategory(@RequestBody CreateCategoryRequest categoryRequest, Authentication authentication) {
-
+        
     }
 }
