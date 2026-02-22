@@ -25,4 +25,13 @@ public class CategoriesService {
     public List<Category> getCategories(UUID userId) {
         return repo.findAll().stream().filter(transaction -> transaction.getUserId().equals(userId)).collect(Collectors.toList());
     }
+
+    public UUID deleteCategory(UUID categoryId, UUID userId) {
+        Category category = repo.findById(userId).orElseThrow(() -> new RuntimeException("Transaction not found"));
+        if (!category.getId().equals(userId)) {
+            throw new RuntimeException("Unauthorized access to transaction");
+        }
+        repo.delete(category);
+        return categoryId;
+    }
 }
