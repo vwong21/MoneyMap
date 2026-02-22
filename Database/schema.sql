@@ -13,6 +13,7 @@ CREATE TABLE users (
 -- CATEGORIES TABLE
 CREATE TABLE categories (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL References users(id) ON DELETE CASCADE,
     name VARCHAR(100) NOT NULL,
     type VARCHAR(50) NOT NULL
 );

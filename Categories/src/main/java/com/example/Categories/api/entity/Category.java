@@ -15,7 +15,10 @@ public class Category {
     @Id
     @GeneratedValue(generator = "UUID")
     @Column(updatable = false, nullable = false)
-    private UUID id;    
+    private UUID id;
+    
+    @Column(name = "user_id")
+    private UUID userId;
 
     @Column(name = "name")
     private String name;
@@ -23,7 +26,8 @@ public class Category {
     @Column(name = "type")
     private String type;
 
-    public Category(String name, String type) {
+    public Category(UUID userId, String name, String type) {
+        this.userId = userId;
         this.name = name;
         this.type = type;
     }
@@ -35,6 +39,14 @@ public class Category {
     public void setId(UUID id) {
         this.id = id;
     } 
+
+    public UUID getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
 
     public String getName() {
         return this.name;

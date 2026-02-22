@@ -1,5 +1,7 @@
 package com.example.Categories.service;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import com.example.Categories.api.entity.Category;
@@ -13,8 +15,8 @@ public class CategoriesService {
         this.repo = categoriesRepo;
     }
 
-    public Category createCategory(String name, String type) {
-        Category category = new Category(name, type);
+    public Category createCategory(UUID userId, String name, String type) {
+        Category category = new Category(userId, name, type);
         return repo.save(category);
     }
 }

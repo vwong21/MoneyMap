@@ -1,7 +1,10 @@
 package com.example.Categories.api.controller;
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import java.util.UUID;
+
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +22,8 @@ public class CategoriesController {
     }
     @PostMapping("/categories")
     public ResponseEntity<Category> createCategory(@RequestBody CreateCategoryRequest categoryRequest, Authentication authentication) {
-        Category newCategory = service.createCategory(categoryRequest.getName(), categoryRequest.getType());
+        UUID userId = (UUID) authentication.getPrincipal();
+        Category newCategory = service.createCategory(userId, categoryRequest.getName(), categoryRequest.getType());
 
         return ResponseEntity.ok(newCategory);
     }
