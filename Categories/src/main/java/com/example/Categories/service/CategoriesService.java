@@ -1,6 +1,8 @@
 package com.example.Categories.service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -18,5 +20,9 @@ public class CategoriesService {
     public Category createCategory(UUID userId, String name, String type) {
         Category category = new Category(userId, name, type);
         return repo.save(category);
+    }
+
+    public List<Category> getCategories(UUID userId) {
+        return repo.findAll().stream().filter(transaction -> transaction.getUserId().equals(userId)).collect(Collectors.toList());
     }
 }

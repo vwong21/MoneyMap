@@ -1,10 +1,12 @@
 package com.example.Categories.api.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +22,7 @@ public class CategoriesController {
     public CategoriesController(CategoriesService categoriesService) {
         this.service = categoriesService;
     }
+
     @PostMapping("/categories")
     public ResponseEntity<Category> createCategory(@RequestBody CreateCategoryRequest categoryRequest, Authentication authentication) {
         UUID userId = (UUID) authentication.getPrincipal();
@@ -28,4 +31,10 @@ public class CategoriesController {
         return ResponseEntity.ok(newCategory);
     }
     
+    @GetMapping("/categories")
+    public ResponseEntity<List<Category>> getCategories(Authentication authenticaiton) {
+        UUID userId = (UUID) authenticaiton.getPrincipal();
+        List<Category> categories = service.getCategories(userId);
+        return ResponseEntity.ok(categories);
+    }
 }
