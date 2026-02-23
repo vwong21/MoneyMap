@@ -28,10 +28,27 @@ public class CategoriesService {
 
     public UUID deleteCategory(UUID categoryId, UUID userId) {
         Category category = repo.findById(userId).orElseThrow(() -> new RuntimeException("Transaction not found"));
-        if (!category.getId().equals(userId)) {
+        if (!category.getUserId().equals(userId)) {
             throw new RuntimeException("Unauthorized access to transaction");
         }
         repo.delete(category);
         return categoryId;
     }
+
+    public Category updateCategory(UUID userId, UUID categoryId, String name, String type){{
+        Category category = repo.findById(categoryId).orElseThrow(() -> new RuntimeException("Transaction not found"));
+        if (!category.getUserId().equals(userId)) {
+            throw new RuntimeException("Unauthorized access to transaction");
+        }
+
+        if (name != null && !name.isBlank()) {
+            category.setName(name);
+        }
+
+        if (type != null && !type.isBlank()) {
+            category.setType(type);
+        }
+
+        return category;
+    }}
 }
