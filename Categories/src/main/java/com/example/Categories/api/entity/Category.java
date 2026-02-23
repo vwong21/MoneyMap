@@ -32,6 +32,8 @@ public class Category {
         this.type = type;
     }
 
+    protected Category() {}
+
     public UUID getId() {
         return this.id;
     }

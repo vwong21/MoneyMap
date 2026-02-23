@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.example.Categories.api.entity.Category;
 import com.example.Categories.database.CategoriesRepo;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CategoriesService {
     private final CategoriesRepo repo;
@@ -27,7 +29,7 @@ public class CategoriesService {
     }
 
     public UUID deleteCategory(UUID categoryId, UUID userId) {
-        Category category = repo.findById(userId).orElseThrow(() -> new RuntimeException("Transaction not found"));
+        Category category = repo.findById(categoryId).orElseThrow(() -> new RuntimeException("Transaction not found"));
         if (!category.getUserId().equals(userId)) {
             throw new RuntimeException("Unauthorized access to transaction");
         }
@@ -35,6 +37,7 @@ public class CategoriesService {
         return categoryId;
     }
 
+    @Transactional
     public Category updateCategory(UUID userId, UUID categoryId, String name, String type){{
         Category category = repo.findById(categoryId).orElseThrow(() -> new RuntimeException("Transaction not found"));
         if (!category.getUserId().equals(userId)) {
