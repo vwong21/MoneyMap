@@ -1,4 +1,4 @@
-💰 ##Finance Tracker
+##💰 Finance Tracker
 
 A backend finance tracking application built with Spring Boot using a microservices architecture, containerized with Docker, and secured with JWT-based authentication.
 
