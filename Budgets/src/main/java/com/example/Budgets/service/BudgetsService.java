@@ -30,4 +30,12 @@ public class BudgetsService {
             .filter(budget -> budget.getUserId().equals(userId))
             .collect(Collectors.toList());
     }
+
+    public void delteBudget(UUID budgetId, UUID userId) {
+        Budget budget = repo.findById(budgetId).orElseThrow(() -> new RuntimeException("Budget not found"));
+        if (!budget.getUserId().equals(userId)) {
+            throw new RuntimeException("Unauthorized access to budget");
+        }
+        repo.delete(budget);
+    }
 }

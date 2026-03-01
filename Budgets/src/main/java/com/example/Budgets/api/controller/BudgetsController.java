@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,5 +34,12 @@ public class BudgetsController {
     public ResponseEntity<List<Budget>> getBudgets(Authentication authentication) {
         UUID userId = (UUID) authentication.getPrincipal();
         return ResponseEntity.ok(service.getBudgets(userId));
+    }
+
+    @DeleteMapping("/budgets/{budgetId}")
+    public ResponseEntity<UUID> deleteBudget(@PathVariable UUID budgetId, Authentication authentication) {
+        UUID userId = (UUID) authentication.getPrincipal();
+        service.delteBudget(budgetId, userId);
+        return ResponseEntity.ok(budgetId);
     }
 }
