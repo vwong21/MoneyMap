@@ -2,7 +2,9 @@ package com.example.Budgets.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -21,5 +23,11 @@ public class BudgetsService {
         Budget budget = new Budget(userId, categoryId, title, amount, startDate, endDate);
         repo.save(budget);
         return budget.getId();
+    }
+
+    public List<Budget> getBudgets (UUID userId) {
+        return repo.findAll().stream()
+            .filter(budget -> budget.getUserId().equals(userId))
+            .collect(Collectors.toList());
     }
 }
