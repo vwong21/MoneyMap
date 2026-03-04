@@ -38,7 +38,7 @@ public class CategoriesService {
     }
 
     @Transactional
-    public Category updateCategory(UUID userId, UUID categoryId, String name, String type){{
+    public Category updateCategory(UUID userId, UUID categoryId, String name, String type){
         Category category = repo.findById(categoryId).orElseThrow(() -> new RuntimeException("Transaction not found"));
         if (!category.getUserId().equals(userId)) {
             throw new RuntimeException("Unauthorized access to transaction");
@@ -53,5 +53,5 @@ public class CategoriesService {
         }
 
         return category;
-    }}
+    }
 }
