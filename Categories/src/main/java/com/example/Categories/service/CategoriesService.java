@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.Categories.api.entity.Category;
 import com.example.Categories.database.CategoriesRepo;
 import com.example.Categories.exception.ResourceNotFoundException;
+import com.example.Categories.exception.UnauthorizedAccessException;
 
 import jakarta.transaction.Transactional;
 
@@ -35,7 +36,7 @@ public class CategoriesService {
     public UUID deleteCategory(UUID categoryId, UUID userId) {
         Category category = repo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
         if (!category.getUserId().equals(userId)) {
-            throw new RuntimeException("Unauthorized access to resource");
+            throw new UnauthorizedAccessException("Unauthorized access to resource");
         }
         repo.delete(category);
         return categoryId;
@@ -46,7 +47,7 @@ public class CategoriesService {
     public Category updateCategory(UUID userId, UUID categoryId, String name, String type){
         Category category = repo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
         if (!category.getUserId().equals(userId)) {
-            throw new RuntimeException("Unauthorized access to transaction");
+            throw new UnauthorizedAccessException("Unauthorized access to resource");
         }
 
         if (name != null && !name.isBlank()) {
