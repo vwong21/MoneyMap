@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.Categories.api.entity.Category;
 import com.example.Categories.database.CategoriesRepo;
+import com.example.Categories.exception.ResourceNotFoundException;
 
 import jakarta.transaction.Transactional;
 
@@ -19,27 +20,31 @@ public class CategoriesService {
         this.repo = categoriesRepo;
     }
 
+    // Create Category
     public Category createCategory(UUID userId, String name, String type) {
         Category category = new Category(userId, name, type);
         return repo.save(category);
     }
 
+    // Get Category
     public List<Category> getCategories(UUID userId) {
         return repo.findAll().stream().filter(transaction -> transaction.getUserId().equals(userId)).collect(Collectors.toList());
     }
 
+    // Delete Category
     public UUID deleteCategory(UUID categoryId, UUID userId) {
-        Category category = repo.findById(categoryId).orElseThrow(() -> new RuntimeException("Transaction not found"));
+        Category category = repo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
         if (!category.getUserId().equals(userId)) {
-            throw new RuntimeException("Unauthorized access to transaction");
+            throw new RuntimeException("Unauthorized access to resource");
         }
         repo.delete(category);
         return categoryId;
     }
 
+    // Update Category
     @Transactional
     public Category updateCategory(UUID userId, UUID categoryId, String name, String type){
-        Category category = repo.findById(categoryId).orElseThrow(() -> new RuntimeException("Transaction not found"));
+        Category category = repo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
         if (!category.getUserId().equals(userId)) {
             throw new RuntimeException("Unauthorized access to transaction");
         }
