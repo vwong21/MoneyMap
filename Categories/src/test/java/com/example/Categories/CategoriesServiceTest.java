@@ -16,7 +16,7 @@ import com.example.Categories.database.CategoriesRepo;
 import com.example.Categories.service.CategoriesService;
 
 @ExtendWith(MockitoExtension.class)
-class CategoriesServiceTest {
+public class CategoriesServiceTest {
 
     @Mock
     private CategoriesRepo repo;
@@ -35,14 +35,20 @@ class CategoriesServiceTest {
 
     @Test
     void createCategory_shouldSaveAndReturnCategory() {
-        Category saved = new Category(userId, "Food", "Expense");
+        // Define expected results
+        Category saved = new Category(userId, "Bubble Tea", "Dessert");
 
+        // Define fake database behaviour
         when(repo.save(any(Category.class))).thenReturn(saved);
 
-        Category result = service.createCategory(userId, "Food", "Expense");
+        // Run service
+        Category result = service.createCategory(userId, "Bubble Tea", "Dessert");
 
-        assertEquals("Food", result.getName());
-        assertEquals("Expense", result.getType());
+        // Assert results
+        assertEquals("Bubble Tea", result.getName());
+        assertEquals("Dessert", result.getType());
+
+        // Verfiy if database was run
         verify(repo).save(any(Category.class));
     }
 
