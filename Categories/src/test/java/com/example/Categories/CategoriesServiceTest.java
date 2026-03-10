@@ -1,14 +1,19 @@
 package com.example.Categories;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.util.*;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.Categories.api.entity.Category;
@@ -41,5 +46,23 @@ public class CategoriesServiceTest {
         assertEquals("Bubble Tea", result.getName());
         assertEquals("Dessert", result.getType());
         verify(repo).save(any(Category.class));
+    }
+
+    @Test
+    public void createCategory_EmptyTypeShouldThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> service.createCategory(userId, "Bubble Tea", ""));
+        verify(repo, never()).save(any());
+    }
+
+    @Test
+    public void createCategory_EmptyNameShouldThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> service.createCategory(userId, "", "Dessert"));
+        verify(repo, never()).save(any());
+    }
+
+    @Test
+    public void createCategory_NullNameShouldThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> service.createCategory(userId, null, "Dessert"));
+        verify(repo, never()).save(any());
     }
 }

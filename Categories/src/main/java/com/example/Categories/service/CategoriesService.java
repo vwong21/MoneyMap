@@ -23,18 +23,28 @@ public class CategoriesService {
 
     // Create Category
     public Category createCategory(UUID userId, String name, String type) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name must have a value");
+        }
+
+        if (type.isBlank()) {
+            throw new IllegalArgumentException("Type cannot be an empty string");
+        }
+
         Category category = new Category(userId, name, type);
         return repo.save(category);
     }
 
     // Get Category
     public List<Category> getCategories(UUID userId) {
-        return repo.findAll().stream().filter(transaction -> transaction.getUserId().equals(userId)).collect(Collectors.toList());
+        return repo.findAll().stream().filter(transaction -> transaction.getUserId().equals(userId))
+                .collect(Collectors.toList());
     }
 
     // Delete Category
     public UUID deleteCategory(UUID categoryId, UUID userId) {
-        Category category = repo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
+        Category category = repo.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
         if (!category.getUserId().equals(userId)) {
             throw new UnauthorizedAccessException("Unauthorized access to resource");
         }
@@ -44,8 +54,9 @@ public class CategoriesService {
 
     // Update Category
     @Transactional
-    public Category updateCategory(UUID userId, UUID categoryId, String name, String type){
-        Category category = repo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
+    public Category updateCategory(UUID userId, UUID categoryId, String name, String type) {
+        Category category = repo.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
         if (!category.getUserId().equals(userId)) {
             throw new UnauthorizedAccessException("Unauthorized access to resource");
         }

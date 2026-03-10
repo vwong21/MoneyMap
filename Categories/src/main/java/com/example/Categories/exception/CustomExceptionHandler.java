@@ -12,7 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 public class CustomExceptionHandler {
-    
+
     @ExceptionHandler(value = ResourceNotFoundException.class)
     public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException exception, WebRequest request) {
         Map<String, Object> body = new HashMap<>();
@@ -24,12 +24,23 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(value = UnauthorizedAccessException.class)
-    public ResponseEntity<?> handleUnauthorizedAccessException (UnauthorizedAccessException exception, WebRequest request) {
+    public ResponseEntity<?> handleUnauthorizedAccessException(UnauthorizedAccessException exception,
+            WebRequest request) {
         Map<String, Object> body = new HashMap<>();
         body.put("TimeStamp", new Date());
         body.put("Message", exception.getMessage());
         body.put("Path", request.getDescription(false));
 
         return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException exception, WebRequest request) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("TimeStamp", new Date());
+        body.put("Message", exception.getMessage());
+        body.put("Path", request.getDescription(false));
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 }
