@@ -21,6 +21,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.Categories.api.entity.Category;
 import com.example.Categories.database.CategoriesRepo;
+import com.example.Categories.exception.ResourceNotFoundException;
+import com.example.Categories.exception.UnauthorizedAccessException;
 import com.example.Categories.service.CategoriesService;
 
 @ExtendWith(MockitoExtension.class)
@@ -95,5 +97,24 @@ public class CategoriesServiceTest {
 
         verify(repo).findById(any(UUID.class));
         verify(repo).delete(category);
+    }
+
+    @Test
+    public void deleteCategory_NonExistentCategoryId_ShouldThrowResourceNotFoundException() {
+        when(repo.findById(any(UUID.class))).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> service.deleteCategory(categoryId, userId));
+
+        verify(repo).findById(categoryId);
+        verify(repo, never()).delete(any(Category.class));
+    }
+
+    @Test
+    public void deleteCategory_UserIdParamDoesNotMatchCategoryUserId_ShouldThrowUnauthorizedAccessException() {
+        UUID newUserId = UUID.randomUUID();
+        Category category = new Category(newUserId, "Bubble Tea", "Dessert");
+        when(repo.findById(any(UUID.class))).thenReturn(Optional.of(category));
+        assertThrows(UnauthorizedAccessException.class, () -> service.deleteCategory(categoryId, userId));
+        verify(repo).findById(categoryId);
+        verify(repo, never()).delete(any(Category.class));
     }
 }
