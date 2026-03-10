@@ -3,12 +3,13 @@ package com.example.Categories;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -80,5 +81,19 @@ public class CategoriesServiceTest {
         assertEquals(new Category(userId, "Hot Pot", "Dinner"), result.get(1));
 
         verify(repo).findAll();
+    }
+
+    // Delete Category
+    @Test
+    public void deleteCategory_ShouldReturnCategoryId() {
+        Category category = new Category(userId, "Bubble Tea", "Dessert");
+        when(repo.findById(any(UUID.class))).thenReturn(Optional.of(category));
+        doNothing().when(repo).delete(category);
+        UUID result = service.deleteCategory(categoryId, userId);
+
+        assertEquals(categoryId, result);
+
+        verify(repo).findById(any(UUID.class));
+        verify(repo).delete(category);
     }
 }
