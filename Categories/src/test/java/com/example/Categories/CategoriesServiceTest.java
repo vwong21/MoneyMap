@@ -117,4 +117,7 @@ public class CategoriesServiceTest {
         verify(repo).findById(categoryId);
         verify(repo, never()).delete(any(Category.class));
     }
+
+    // Dont need to check if ids are blank because UUID cannot be "" like Strings
+    // can
 }
