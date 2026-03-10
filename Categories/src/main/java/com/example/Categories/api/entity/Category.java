@@ -1,5 +1,6 @@
 package com.example.Categories.api.entity;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -11,12 +12,12 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "categories")
 public class Category {
-    
+
     @Id
     @GeneratedValue(generator = "UUID")
     @Column(updatable = false, nullable = false)
     private UUID id;
-    
+
     @Column(name = "user_id")
     private UUID userId;
 
@@ -32,7 +33,25 @@ public class Category {
         this.type = type;
     }
 
-    protected Category() {}
+    protected Category() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof Category))
+            return false;
+        Category category = (Category) o;
+        return Objects.equals(userId, category.userId) &&
+                Objects.equals(name, category.name) &&
+                Objects.equals(type, category.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, name, type);
+    }
 
     public UUID getId() {
         return this.id;
@@ -40,7 +59,7 @@ public class Category {
 
     public void setId(UUID id) {
         this.id = id;
-    } 
+    }
 
     public UUID getUserId() {
         return this.userId;

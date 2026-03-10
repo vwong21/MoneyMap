@@ -35,10 +35,9 @@ public class CategoriesService {
         return repo.save(category);
     }
 
-    // Get Category
+    // Get Categories
     public List<Category> getCategories(UUID userId) {
-        return repo.findAll().stream().filter(transaction -> transaction.getUserId().equals(userId))
-                .collect(Collectors.toList());
+        return repo.findAll().stream().filter(transaction -> transaction.getUserId().equals(userId)).toList();
     }
 
     // Delete Category

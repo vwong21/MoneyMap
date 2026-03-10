@@ -7,6 +7,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -64,5 +66,19 @@ public class CategoriesServiceTest {
     public void createCategory_NullNameShouldThrowIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> service.createCategory(userId, null, "Dessert"));
         verify(repo, never()).save(any());
+    }
+
+    // Get Categories
+    @Test
+    public void getCategories_ShouldReturnListOfCategories() {
+        List<Category> list = List.of(new Category(userId, "Bubble Tea", "Dessert"),
+                new Category(userId, "Hot Pot", "Dinner"));
+        when(repo.findAll()).thenReturn(list);
+        List<Category> result = service.getCategories(userId);
+
+        assertEquals(new Category(userId, "Bubble Tea", "Dessert"), result.get(0));
+        assertEquals(new Category(userId, "Hot Pot", "Dinner"), result.get(1));
+
+        verify(repo).findAll();
     }
 }
