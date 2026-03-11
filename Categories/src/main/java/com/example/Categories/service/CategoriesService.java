@@ -2,7 +2,6 @@ package com.example.Categories.service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -42,6 +41,9 @@ public class CategoriesService {
 
     // Delete Category
     public UUID deleteCategory(UUID categoryId, UUID userId) {
+        if (categoryId == null) {
+            throw new IllegalArgumentException("CategoryId cannot be null");
+        }
         Category category = repo.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
         if (!category.getUserId().equals(userId)) {
@@ -54,8 +56,12 @@ public class CategoriesService {
     // Update Category
     @Transactional
     public Category updateCategory(UUID userId, UUID categoryId, String name, String type) {
+        if (categoryId == null) {
+            throw new IllegalArgumentException("CategoryId cannot be null");
+        }
         Category category = repo.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
+
         if (!category.getUserId().equals(userId)) {
             throw new UnauthorizedAccessException("Unauthorized access to resource");
         }

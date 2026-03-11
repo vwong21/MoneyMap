@@ -118,6 +118,35 @@ public class CategoriesServiceTest {
         verify(repo, never()).delete(any(Category.class));
     }
 
-    // Dont need to check if ids are blank because UUID cannot be "" like Strings
-    // can
+    @Test
+    public void deleteCategory_NullCategoryId_ShouldThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> service.deleteCategory(null, userId));
+        verify(repo, never()).findById(any());
+    }
+
+    // Update Category
+    @Test
+    public void updateCategory_NullCategoryId_ShouldThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> service.updateCategory(userId, null, "Bubble Tea", "Dessert"));
+        verify(repo, never()).findById(any());
+    }
+
+    @Test
+    public void updateCategory_NonExistentCategoryId_ShouldThrowResourceNotFoundException() {
+        UUID newCategoryId = UUID.randomUUID();
+        when(repo.findById(newCategoryId)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.updateCategory(userId, newCategoryId, "Bubble Tea", "Dessert"));
+        verify(repo).findById(newCategoryId);
+    }
+
+    @Test
+    public void updateCategory_UserIdParamDoesNotMatchCategoryUserId_ShouldThrowUnauthorizedAccessException() {
+        UUID randomUserId = UUID.randomUUID();
+        Category foundCategory = new Category(userId, "Bubble Tea", "Dessert");
+        when(repo.findById(categoryId)).thenReturn(Optional.of(foundCategory));
+        assertThrows(UnauthorizedAccessException.class,
+                () -> service.updateCategory(randomUserId, categoryId, "Bubble Tea", "Dessert"));
+    }
 }
