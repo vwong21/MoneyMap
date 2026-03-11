@@ -126,6 +126,16 @@ public class CategoriesServiceTest {
 
     // Update Category
     @Test
+    public void updateCategory_ShouldReturnCategory() {
+        Category foundCategory = new Category(userId, "Bingsoo", "Dessert");
+        when(repo.findById(categoryId)).thenReturn(Optional.of(foundCategory));
+        Category result = service.updateCategory(userId, categoryId, "Bubble Tea", null);
+        assertEquals("Bubble Tea", result.getName());
+        assertEquals("Dessert", result.getType());
+        verify(repo).findById(categoryId);
+    }
+
+    @Test
     public void updateCategory_NullCategoryId_ShouldThrowIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class,
                 () -> service.updateCategory(userId, null, "Bubble Tea", "Dessert"));
