@@ -13,7 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler(value = IllegalArgumentException.class);
+    @ExceptionHandler(value = IllegalArgumentException.class)
     public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException exception, WebRequest request) {
         Map<String, Object> body = new HashMap<>();
         body.put("TimeStamp", new Date());
