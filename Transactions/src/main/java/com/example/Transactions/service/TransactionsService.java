@@ -21,24 +21,32 @@ public class TransactionsService {
     public TransactionsService(TransactionsRepo transactionsRepo) {
         this.repo = transactionsRepo;
     }
-    
-    public Transaction createTransaction(UUID userId, String title, BigDecimal amount, String description, UUID categoryId) {
+
+    public Transaction createTransaction(UUID userId, String title, BigDecimal amount, String description,
+            UUID categoryId) {
         LocalDateTime createdAt = LocalDateTime.now();
 
-        Transaction transaction =  new Transaction(
-            userId,
-            title,
-            amount,
-            createdAt,
-            description,
-            categoryId
-        );
+        if (title == null || title.isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be empty");
+        }
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than 0");
+        }
+
+        Transaction transaction = new Transaction(
+                userId,
+                title,
+                amount,
+                createdAt,
+                description,
+                categoryId);
 
         return repo.save(transaction);
     }
 
     public Transaction getTransaction(UUID transactionId, UUID userId) {
-        Transaction transaction = repo.findById(transactionId).orElseThrow(() -> new RuntimeException("Transaction not found"));
+        Transaction transaction = repo.findById(transactionId)
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
 
         if (!transaction.getUserId().equals(userId)) {
             throw new RuntimeException("Unauthorized access to transaction");
@@ -49,12 +57,13 @@ public class TransactionsService {
 
     public List<Transaction> getTransactionsForUser(UUID userId) {
         return repo.findAll().stream()
-            .filter(transaction -> transaction.getUserId().equals(userId))
-            .collect(Collectors.toList());
+                .filter(transaction -> transaction.getUserId().equals(userId))
+                .collect(Collectors.toList());
     }
 
     public UUID deleteTransaction(UUID transactionId, UUID userId) {
-        Transaction transaction = repo.findById(transactionId).orElseThrow(() -> new RuntimeException("Transaction not found"));
+        Transaction transaction = repo.findById(transactionId)
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
 
         if (!transaction.getUserId().equals(userId)) {
             throw new RuntimeException("Unauthorized access to transaction");
@@ -65,13 +74,15 @@ public class TransactionsService {
     }
 
     @Transactional
-    public Transaction udpateTransaction(UUID transactionId, UUID userId, String title, BigDecimal amount, String description, UUID categoryId) {
-        Transaction transaction = repo.findById(transactionId).orElseThrow(() -> new RuntimeException("Transaction not found"));
+    public Transaction udpateTransaction(UUID transactionId, UUID userId, String title, BigDecimal amount,
+            String description, UUID categoryId) {
+        Transaction transaction = repo.findById(transactionId)
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
 
         if (!transaction.getUserId().equals(userId)) {
             throw new RuntimeException("Unauthorized access to transaction");
         }
-        
+
         if (title != null) {
             transaction.setTitle(title);
         }
@@ -84,7 +95,7 @@ public class TransactionsService {
         if (categoryId != null) {
             transaction.setCategoryId(categoryId);
         }
-        
+
         return transaction;
     }
 }
