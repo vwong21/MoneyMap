@@ -8,6 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
@@ -28,24 +29,29 @@ public class Transaction {
     @Column(name = "amount")
     private BigDecimal amount;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     @Column(name = "description")
     private String description;
 
-    @Column(name= "category_id")
+    @Column(name = "category_id")
     private UUID categoryId;
 
     public Transaction() {
 
     }
 
-    public Transaction(UUID userId, String title, BigDecimal amount, LocalDateTime createdAt, String description, UUID categoryId) {
+    public Transaction(UUID userId, String title, BigDecimal amount, String description,
+            UUID categoryId) {
         this.userId = userId;
         this.title = title;
         this.amount = amount;
-        this.createdAt = createdAt;
         this.description = description;
         this.categoryId = categoryId;
     }
@@ -89,10 +95,6 @@ public class Transaction {
     // CreatedAt
     public LocalDateTime getCreatedAt() {
         return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     // Description

@@ -24,7 +24,6 @@ public class TransactionsService {
 
     public Transaction createTransaction(UUID userId, String title, BigDecimal amount, String description,
             UUID categoryId) {
-        LocalDateTime createdAt = LocalDateTime.now();
 
         if (title == null || title.isEmpty()) {
             throw new IllegalArgumentException("Title cannot be empty");
@@ -37,7 +36,6 @@ public class TransactionsService {
                 userId,
                 title,
                 amount,
-                createdAt,
                 description,
                 categoryId);
 
