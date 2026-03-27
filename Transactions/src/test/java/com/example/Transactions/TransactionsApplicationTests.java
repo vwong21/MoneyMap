@@ -6,11 +6,16 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,6 +56,14 @@ class TransactionsApplicationTests {
         assertEquals("Hang out with friends", result.getDescription());
         assertEquals(categoryId, result.getCategoryId());
         verify(repo).save(any(Transaction.class));
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    public void createTransaction_EmptyTitleShouldThrowIllegalArgumentException(String title) {
+        assertThrows(IllegalArgumentException.class, () -> service.createTransaction(userId, title,
+                new BigDecimal("47.28"), "Hang out with friends", categoryId));
+        verify(repo, times(0)).save(any(Transaction.class));
     }
 
 }
