@@ -11,6 +11,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+
 import com.example.Transactions.api.entity.Transaction;
 import com.example.Transactions.database.TransactionsRepo;
 import com.example.Transactions.service.TransactionsService;
@@ -36,8 +41,16 @@ class TransactionsApplicationTests {
 
     @Test
     public void createTransaction_ShouldSaveAndReturnTransaction() {
-        Transaction saved = new Transaction(userId, "Big Way Hot Pot", new BigDecimal("47.28"), "Hot Pot date",
+        Transaction saved = new Transaction(userId, "Big Way Hot Pot", new BigDecimal("47.28"), "Hang out with friends",
                 categoryId);
+        when(repo.save(any(Transaction.class))).thenReturn(saved);
+        Transaction result = service.createTransaction(userId, "Big Way Hot Pot", new BigDecimal("47.28"),
+                "Hang out with friends", categoryId);
+        assertEquals("Big Way Hot Pot", result.getTitle());
+        assertEquals(new BigDecimal("47.28"), result.getAmount());
+        assertEquals("Hang out with friends", result.getDescription());
+        assertEquals(categoryId, result.getCategoryId());
+        verify(repo).save(any(Transaction.class));
     }
 
 }
