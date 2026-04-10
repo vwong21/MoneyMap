@@ -1,11 +1,13 @@
 package com.example.Transactions.service;
 
 import java.math.BigDecimal;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import com.example.Transactions.api.entity.Transaction;
@@ -48,7 +50,7 @@ public class TransactionsService {
                 .orElseThrow(() -> new TransactionNotFoundException("Transaction not found"));
 
         if (!transaction.getUserId().equals(userId)) {
-            throw new RuntimeException("Unauthorized access to transaction");
+            throw new AccessDeniedException("Unauthorized access to transaction");
         }
 
         return transaction;

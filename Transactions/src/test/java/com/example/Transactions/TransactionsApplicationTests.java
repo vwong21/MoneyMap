@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -23,6 +24,7 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.access.AccessDeniedException;
 
 import com.example.Transactions.api.entity.Transaction;
 import com.example.Transactions.database.TransactionsRepo;
@@ -108,4 +110,13 @@ class TransactionsApplicationTests {
         verify(repo).findById(transactionId);
     }
 
+    @Test
+    public void getTransaction_UnuthorizedTransactionIdShouldThrowAccessDeniedException() {
+        UUID secondaryUserId = UUID.randomUUID();
+        Transaction returnedTransaction = new Transaction(userId, "Big way Hot Pot", new BigDecimal("47.28"),
+                "Hang out", categoryId);
+        when(repo.findById(transactionId)).thenReturn(Optional.of(returnedTransaction));
+        assertThrows(AccessDeniedException.class, () -> service.getTransaction(transactionId, secondaryUserId));
+        verify(repo).findById(transactionId);
+    }
 }
