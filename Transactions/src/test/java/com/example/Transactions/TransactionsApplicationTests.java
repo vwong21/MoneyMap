@@ -2,6 +2,7 @@ package com.example.Transactions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -136,6 +137,16 @@ class TransactionsApplicationTests {
         assertEquals(userTransactions.get(0), result.get(0));
         assertEquals(userTransactions.get(1), result.get(1));
 
+        verify(repo).findAll();
+    }
+
+    @Test
+    public void getTransactionForUser_NoValuesShouldReturnEmptyTransactionsList() {
+        List<Transaction> emptyList = new ArrayList<>();
+
+        when(repo.findAll()).thenReturn(emptyList);
+        List<Transaction> result = service.getTransactionsForUser(userId);
+        assertTrue(result.isEmpty());
         verify(repo).findAll();
     }
 }
