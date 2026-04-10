@@ -20,7 +20,7 @@ import com.example.Budgets.service.BudgetsService;
 @RestController
 public class BudgetsController {
     private final BudgetsService service;
-    
+
     public BudgetsController(BudgetsService service) {
         this.service = service;
     }
@@ -28,7 +28,8 @@ public class BudgetsController {
     @PostMapping("/budgets")
     public ResponseEntity<UUID> createBudget(@RequestBody CreateBudgetRequest budget, Authentication authentication) {
         UUID userId = (UUID) authentication.getPrincipal();
-        return ResponseEntity.ok(service.createBudget(userId, budget.getCategoryId(), budget.getTitle(), budget.getAmount(), budget.getStartDate(), budget.getEndDate()));
+        return ResponseEntity.ok(service.createBudget(userId, budget.getCategoryId(), budget.getTitle(),
+                budget.getAmount(), budget.getStartDate(), budget.getEndDate()));
     }
 
     @GetMapping("/budgets")
@@ -40,7 +41,7 @@ public class BudgetsController {
     @DeleteMapping("/budgets/{budgetId}")
     public ResponseEntity<UUID> deleteBudget(@PathVariable UUID budgetId, Authentication authentication) {
         UUID userId = (UUID) authentication.getPrincipal();
-        service.delteBudget(budgetId, userId);
+        service.deleteBudget(budgetId, userId);
         return ResponseEntity.ok(budgetId);
     }
 }

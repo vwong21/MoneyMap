@@ -19,19 +19,20 @@ public class BudgetsService {
         this.repo = repo;
     }
 
-    public UUID createBudget(UUID userId, UUID categoryId,  String title, BigDecimal amount, LocalDateTime startDate, LocalDateTime endDate) {
+    public UUID createBudget(UUID userId, UUID categoryId, String title, BigDecimal amount, LocalDateTime startDate,
+            LocalDateTime endDate) {
         Budget budget = new Budget(userId, categoryId, title, amount, startDate, endDate);
         repo.save(budget);
         return budget.getId();
     }
 
-    public List<Budget> getBudgets (UUID userId) {
+    public List<Budget> getBudgets(UUID userId) {
         return repo.findAll().stream()
-            .filter(budget -> budget.getUserId().equals(userId))
-            .collect(Collectors.toList());
+                .filter(budget -> budget.getUserId().equals(userId))
+                .collect(Collectors.toList());
     }
 
-    public void delteBudget(UUID budgetId, UUID userId) {
+    public void deleteBudget(UUID budgetId, UUID userId) {
         Budget budget = repo.findById(budgetId).orElseThrow(() -> new RuntimeException("Budget not found"));
         if (!budget.getUserId().equals(userId)) {
             throw new RuntimeException("Unauthorized access to budget");

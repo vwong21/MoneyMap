@@ -15,7 +15,7 @@ import com.example.Auth.security.JwtUtil;
 
 @Service
 public class AuthService {
-    
+
     private final AuthRepository repo;
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
@@ -27,14 +27,15 @@ public class AuthService {
 
     // register method
     public void register(User user) {
-        if (
-            user.getEmail() == null || user.getEmail().isBlank() || user.getFirstName() == null || user.getFirstName().isBlank() || user.getLastName() == null || user.getLastName().isBlank() || user.getPassword() == null || user.getPassword().isBlank()) {
-                throw  new InvalidRequestException("All fields must be filled out.");
-            }
+        if (user.getEmail() == null || user.getEmail().isBlank() || user.getFirstName() == null
+                || user.getFirstName().isBlank() || user.getLastName() == null || user.getLastName().isBlank()
+                || user.getPassword() == null || user.getPassword().isBlank()) {
+            throw new InvalidRequestException("All fields must be filled out.");
+        }
 
         user.setPassword(encoder.encode(user.getPassword()));
         repo.register(user);
-        
+
     }
 
     // login method
@@ -50,7 +51,6 @@ public class AuthService {
 
         return jwtUtil.generateToken(user.getId());
 
-
     }
 
     // getUser method
@@ -62,33 +62,28 @@ public class AuthService {
         }
 
         return new UserResponse(
-            user.getId(),
-            user.getEmail(),
-            user.getFirstName(),
-            user.getLastName()
-        );
+                user.getId(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName());
     }
 
     // patchUser method
     @Transactional
     public UserResponse updateUser(UUID userId, PatchRequest request) {
         if (request.getEmail() == null && request.getFirstName() == null && request.getLastName() == null) {
-        throw new IllegalArgumentException("At least one field must be provided");
+            throw new IllegalArgumentException("At least one field must be provided");
         }
-        try {
-            if (request.getEmail() != null) {
+
+        if (request.getEmail() != null) {
             repo.updateEmail(userId, request.getEmail());
-            }
-            if (request.getFirstName() != null) {
-                repo.updateFirstName(userId, request.getFirstName());
-            }
-            if (request.getLastName() != null) {
-                repo.updateLastName(userId, request.getLastName());
-            }
-        } catch (Exception e) {
-            throw e;
         }
-        
+        if (request.getFirstName() != null) {
+            repo.updateFirstName(userId, request.getFirstName());
+        }
+        if (request.getLastName() != null) {
+            repo.updateLastName(userId, request.getLastName());
+        }
 
         return getUser(userId);
     }
@@ -97,4 +92,4 @@ public class AuthService {
     public UUID deleteUser(UUID userId) {
         return repo.deleteUser(userId);
     }
-} 
+}
