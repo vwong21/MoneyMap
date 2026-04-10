@@ -46,6 +46,10 @@ public class TransactionsService {
     }
 
     public Transaction getTransaction(UUID transactionId, UUID userId) {
+        if (transactionId == null) {
+            throw new IllegalArgumentException("Transaction Id cannot be null");
+        }
+
         Transaction transaction = repo.findById(transactionId)
                 .orElseThrow(() -> new TransactionNotFoundException("Transaction not found"));
 
