@@ -9,7 +9,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -86,7 +87,7 @@ class TransactionsApplicationTests {
         return Stream.of(BigDecimal.ZERO, BigDecimal.valueOf(-3));
     }
 
-    // Get Transactions
+    // Get Transaction
     @Test
     public void getTransaction_ShouldReturnTransaction() {
         Transaction transaction = new Transaction(userId, "Big Way Hot Pot", new BigDecimal("47.28"), "Hang out",
@@ -118,5 +119,23 @@ class TransactionsApplicationTests {
         when(repo.findById(transactionId)).thenReturn(Optional.of(returnedTransaction));
         assertThrows(AccessDeniedException.class, () -> service.getTransaction(transactionId, secondaryUserId));
         verify(repo).findById(transactionId);
+    }
+
+    // Get Transactions For User
+    @Test
+    public void getTransactionForUser_ShouldReturnTransactionsList() {
+        List<Transaction> userTransactions = new ArrayList<>();
+        userTransactions
+                .add(new Transaction(userId, "Big Way Hot Pot", new BigDecimal("47.28"), "Hang out", categoryId));
+        userTransactions
+                .add(new Transaction(userId, "Haidilao Hot Pot", new BigDecimal("73.98"), "Date night", categoryId));
+
+        when(repo.findAll()).thenReturn(userTransactions);
+        List<Transaction> result = service.getTransactionsForUser(userId);
+
+        assertEquals(userTransactions.get(0), result.get(0));
+        assertEquals(userTransactions.get(1), result.get(1));
+
+        verify(repo).findAll();
     }
 }
