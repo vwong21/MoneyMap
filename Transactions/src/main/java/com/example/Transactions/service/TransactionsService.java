@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.Transactions.api.entity.Transaction;
 import com.example.Transactions.database.TransactionsRepo;
+import com.example.Transactions.exception.TransactionNotFoundException;
 
 import jakarta.transaction.Transactional;
 
@@ -44,7 +45,7 @@ public class TransactionsService {
 
     public Transaction getTransaction(UUID transactionId, UUID userId) {
         Transaction transaction = repo.findById(transactionId)
-                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+                .orElseThrow(() -> new TransactionNotFoundException("Transaction not found"));
 
         if (!transaction.getUserId().equals(userId)) {
             throw new RuntimeException("Unauthorized access to transaction");
