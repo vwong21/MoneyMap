@@ -1,5 +1,6 @@
 package com.example.Transactions.exception;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,5 +34,15 @@ public class CustomExceptionHandler {
         body.put("Path", request.getDescription(false));
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException exception, WebRequest request) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("TimeStamp", new Date());
+        body.put("Message", exception.getMessage());
+        body.put("Path", request.getDescription(false));
+
+        return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
     }
 }
