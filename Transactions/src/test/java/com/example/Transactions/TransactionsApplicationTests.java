@@ -161,4 +161,10 @@ class TransactionsApplicationTests {
         verify(repo).findById(transactionId);
         verify(repo).delete(transaction);
     }
+
+    @Test
+    public void deleteTransaction_NullTransactionIdShouldThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> service.deleteTransaction(null, userId));
+        verify(repo, never()).findById(any(UUID.class));
+    }
 }

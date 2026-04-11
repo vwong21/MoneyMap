@@ -67,6 +67,9 @@ public class TransactionsService {
     }
 
     public UUID deleteTransaction(UUID transactionId, UUID userId) {
+        if (transactionId == null) {
+            throw new IllegalArgumentException("Transaction Id cannot be null");
+        }
         Transaction transaction = repo.findById(transactionId)
                 .orElseThrow(() -> new RuntimeException("Transaction not found"));
 
