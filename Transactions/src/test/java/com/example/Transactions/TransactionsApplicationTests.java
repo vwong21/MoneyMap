@@ -167,4 +167,12 @@ class TransactionsApplicationTests {
         assertThrows(IllegalArgumentException.class, () -> service.deleteTransaction(null, userId));
         verify(repo, never()).findById(any(UUID.class));
     }
+
+    @Test
+    public void deleteTransaction_NonExistentTransactionIdShouldThrowTransactionNotFoundException() {
+        when(repo.findById(transactionId)).thenReturn(Optional.empty());
+        assertThrows(TransactionNotFoundException.class, () -> service.deleteTransaction(transactionId, userId));
+        verify(repo).findById(transactionId);
+        verify(repo, never()).delete(any(Transaction.class));
+    }
 }

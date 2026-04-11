@@ -71,7 +71,7 @@ public class TransactionsService {
             throw new IllegalArgumentException("Transaction Id cannot be null");
         }
         Transaction transaction = repo.findById(transactionId)
-                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+                .orElseThrow(() -> new TransactionNotFoundException("Transaction not found"));
 
         if (!transaction.getUserId().equals(userId)) {
             throw new RuntimeException("Unauthorized access to transaction");
