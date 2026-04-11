@@ -85,7 +85,7 @@ public class TransactionsService {
     public Transaction udpateTransaction(UUID transactionId, UUID userId, String title, BigDecimal amount,
             String description, UUID categoryId) {
         Transaction transaction = repo.findById(transactionId)
-                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+                .orElseThrow(() -> new TransactionNotFoundException("Transaction not found"));
 
         if (!transaction.getUserId().equals(userId)) {
             throw new RuntimeException("Unauthorized access to transaction");

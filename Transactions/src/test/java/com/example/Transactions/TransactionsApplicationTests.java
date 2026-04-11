@@ -186,4 +186,20 @@ class TransactionsApplicationTests {
         verify(repo).findById(transactionId);
         verify(repo, never()).delete(any(Transaction.class));
     }
+
+    // Update Transaction
+    @Test
+    public void updateTransaction_ShouldReturnTransaction() {
+        Transaction transaction = new Transaction(userId, "Big Way Hot Pot", new BigDecimal("47.28"), "Hang out",
+                categoryId);
+        UUID updatedCategoryId = UUID.randomUUID();
+        when(repo.findById(transactionId)).thenReturn(Optional.of(transaction));
+        Transaction result = service.udpateTransaction(transactionId, userId, "Haidilao Hot Pot",
+                new BigDecimal("73.98"), "Date night", updatedCategoryId);
+        assertEquals("Haidilao Hot Pot", result.getTitle());
+        assertEquals(new BigDecimal("73.98"), result.getAmount());
+        assertEquals("Date night", result.getDescription());
+        assertEquals(updatedCategoryId, result.getCategoryId());
+    }
+
 }
