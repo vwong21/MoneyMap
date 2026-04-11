@@ -149,4 +149,16 @@ class TransactionsApplicationTests {
         assertTrue(result.isEmpty());
         verify(repo).findAll();
     }
+
+    // Delete Transaction
+    @Test
+    public void deleteTransaction_ShouldReturnTransaction() {
+        Transaction transaction = new Transaction(userId, "Big Way Hot Pot", new BigDecimal("47.28"), "Hang out",
+                categoryId);
+        when(repo.findById(transactionId)).thenReturn(Optional.of(transaction));
+        UUID result = service.deleteTransaction(transactionId, userId);
+        assertEquals(transactionId, result);
+        verify(repo).findById(transactionId);
+        verify(repo).delete(transaction);
+    }
 }
