@@ -74,7 +74,7 @@ public class TransactionsService {
                 .orElseThrow(() -> new TransactionNotFoundException("Transaction not found"));
 
         if (!transaction.getUserId().equals(userId)) {
-            throw new RuntimeException("Unauthorized access to transaction");
+            throw new AccessDeniedException("Unauthorized access to transaction");
         }
 
         repo.delete(transaction);

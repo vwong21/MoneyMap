@@ -175,4 +175,15 @@ class TransactionsApplicationTests {
         verify(repo).findById(transactionId);
         verify(repo, never()).delete(any(Transaction.class));
     }
+
+    @Test
+    public void deleteTransaction_UnuthorizedTransactionIdShouldThrowAccessDeniedException() {
+        UUID unauthorizedUserId = UUID.randomUUID();
+        Transaction transaction = new Transaction(userId, "Big Way Hot Pot", new BigDecimal("47.28"), "Hang out",
+                categoryId);
+        when(repo.findById(transactionId)).thenReturn(Optional.of(transaction));
+        assertThrows(AccessDeniedException.class, () -> service.deleteTransaction(transactionId, unauthorizedUserId));
+        verify(repo).findById(transactionId);
+        verify(repo, never()).delete(any(Transaction.class));
+    }
 }
