@@ -202,4 +202,10 @@ class TransactionsApplicationTests {
         assertEquals(updatedCategoryId, result.getCategoryId());
     }
 
+    @Test public void updateTransaction_NullTransactionIdShouldThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> service.udpateTransaction(null, userId, null, null, null, categoryId));
+        verify(repo, never()).findById(any(UUID.class));
+    }
+
+
 }

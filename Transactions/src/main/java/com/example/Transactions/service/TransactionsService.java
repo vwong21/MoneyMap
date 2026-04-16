@@ -84,6 +84,9 @@ public class TransactionsService {
     @Transactional
     public Transaction udpateTransaction(UUID transactionId, UUID userId, String title, BigDecimal amount,
             String description, UUID categoryId) {
+        if (transactionId == null) {
+            throw new IllegalArgumentException("Transaction Id cannot be null");
+        }
         Transaction transaction = repo.findById(transactionId)
                 .orElseThrow(() -> new TransactionNotFoundException("Transaction not found"));
 
