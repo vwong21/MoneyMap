@@ -218,4 +218,15 @@ class TransactionsApplicationTests {
         verify(repo).findById(transactionId);
     }
 
+    @Test
+    public void updateTransaction_UnuthorizedTransactionIdShouldThrowAccessDeniedException() {
+        UUID unauthorizedUserId = UUID.randomUUID();
+        Transaction transaction = new Transaction(unauthorizedUserId, "Big Way Hot Pot", new BigDecimal("47.28"),
+                "Hang out", categoryId);
+        when(repo.findById(transactionId)).thenReturn(Optional.of(transaction));
+        assertThrows(AccessDeniedException.class,
+                () -> service.udpateTransaction(transactionId, userId, "Haidilao Hot Pot",
+                        new BigDecimal("73.98"), "Date night", categoryId));
+        verify(repo).findById(transactionId);
+    }
 }
