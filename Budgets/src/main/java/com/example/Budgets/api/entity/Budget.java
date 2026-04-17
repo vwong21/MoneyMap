@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "budgets")
 public class Budget {
-    
+
     @Id
     @GeneratedValue(generator = "UUID")
     @Column(updatable = false, nullable = false)
@@ -28,7 +28,7 @@ public class Budget {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "amount") 
+    @Column(name = "amount")
     private BigDecimal amount;
 
     @Column(name = "start_date")
@@ -36,8 +36,10 @@ public class Budget {
 
     @Column(name = "end_date")
     private LocalDateTime endDate;
-    
-    public Budget (UUID userId, UUID categoryId, String title, BigDecimal amount, LocalDateTime startDate, LocalDateTime endDate) {
+
+    public Budget(UUID userId, UUID categoryId, String title, BigDecimal amount, LocalDateTime startDate,
+            LocalDateTime endDate) {
+        this.id = UUID.randomUUID(); // add this
         this.userId = userId;
         this.categoryId = categoryId;
         this.title = title;
@@ -46,7 +48,8 @@ public class Budget {
         this.endDate = endDate;
     }
 
-    protected Budget() {}
+    protected Budget() {
+    }
 
     public UUID getId() {
         return this.id;
@@ -54,7 +57,7 @@ public class Budget {
 
     public void setId(UUID id) {
         this.id = id;
-    } 
+    }
 
     public UUID getUserId() {
         return this.userId;
