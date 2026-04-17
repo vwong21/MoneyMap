@@ -202,10 +202,20 @@ class TransactionsApplicationTests {
         assertEquals(updatedCategoryId, result.getCategoryId());
     }
 
-    @Test public void updateTransaction_NullTransactionIdShouldThrowIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> service.udpateTransaction(null, userId, null, null, null, categoryId));
+    @Test
+    public void updateTransaction_NullTransactionIdShouldThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> service.udpateTransaction(null, userId, null, null, null, categoryId));
         verify(repo, never()).findById(any(UUID.class));
     }
 
+    @Test
+    public void updateTransaction_NonExistentTransactionIdShouldThrowTransactionNotFoundException() {
+        when(repo.findById(transactionId)).thenReturn(Optional.empty());
+        assertThrows(TransactionNotFoundException.class,
+                () -> service.udpateTransaction(transactionId, userId, "Haidilao Hot Pot",
+                        new BigDecimal("73.98"), "Date night", categoryId));
+        verify(repo).findById(transactionId);
+    }
 
 }
