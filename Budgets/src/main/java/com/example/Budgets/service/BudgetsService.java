@@ -21,6 +21,9 @@ public class BudgetsService {
 
     public UUID createBudget(UUID userId, UUID categoryId, String title, BigDecimal amount, LocalDateTime startDate,
             LocalDateTime endDate) {
+        if (title == null || title.isEmpty()) {
+            throw new IllegalArgumentException("Title must contain a value");
+        }
         Budget budget = new Budget(userId, categoryId, title, amount, startDate, endDate);
         repo.save(budget);
         return budget.getId();
