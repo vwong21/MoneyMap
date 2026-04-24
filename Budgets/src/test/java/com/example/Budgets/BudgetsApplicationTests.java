@@ -5,9 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -103,6 +107,44 @@ class BudgetsApplicationTests {
                 () -> service.createBudget(userId, categoryId, "Groceries", new BigDecimal("750.00"), startDate,
                         beforeStart));
         verify(repo, never()).save(any(Budget.class));
+    }
+
+    // Get Budgets
+
+    @Test
+    void getBudgets_ShouldReturnBudgetsList() {
+
+        List<Budget> budgets = new ArrayList<Budget>();
+        budgets.add(new Budget(userId, categoryId, "Groceries", new BigDecimal("750.00"), startDate, endDate));
+        budgets.add(new Budget(userId, categoryId, "Dessert", new BigDecimal("250.00"), startDate, endDate));
+
+        when(repo.findAll()).thenReturn(budgets);
+
+        List<Budget> result = service.getBudgets(userId);
+
+        assertThat(result.size()).isEqualTo(2);
+
+        verify(repo).findAll();
+    }
+
+    @Test
+    void getBudgets_NoEntriesShouldReturnEmptyList() {
+        when(repo.findAll()).thenReturn(List.of());
+        List<Budget> result = service.getBudgets(userId);
+        assertThat(result.size()).isEqualTo(0);
+    }
+
+    // Delete Budget
+    @Test
+    void deleteBudget_ShouldCallDelete() {
+        UUID budgetId = UUID.randomUUID();
+        Budget budget = new Budget(userId, categoryId, "Groceries", new BigDecimal("750.00"), startDate, endDate);
+
+        when(repo.findById(budgetId)).thenReturn(Optional.of(budget));
+
+        service.deleteBudget(budgetId, userId);
+
+        verify(repo).delete(budget);
     }
 
 }
