@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -25,6 +26,7 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.access.AccessDeniedException;
 
 import com.example.Budgets.api.entity.Budget;
 import com.example.Budgets.database.BudgetsRepo;
@@ -147,4 +149,31 @@ class BudgetsApplicationTests {
         verify(repo).delete(budget);
     }
 
+    @Test
+    void deleteBudget_NullBudgetIdShouldThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> service.deleteBudget(null, userId));
+        verify(repo, never()).delete(any(Budget.class));
+    }
+
+    @Test
+    void deleteBudget_NonExistentBudgetIdShouldThrowNoSuchElementException() {
+        UUID budgetId = UUID.randomUUID();
+
+        when(repo.findById(budgetId)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> service.deleteBudget(budgetId, userId));
+        verify(repo, never()).delete(any(Budget.class));
+    }
+
+    @Test
+    void deleteBudget_UnauthorizedBudgetIdShouldThrowAccessDeniedException() {
+        UUID budgetId = UUID.randomUUID();
+        UUID differentUserId = UUID.randomUUID();
+        Budget budget = new Budget(userId, categoryId, "Groceries", new BigDecimal("750.00"), startDate, endDate);
+
+        when(repo.findById(budgetId)).thenReturn(Optional.of(budget));
+
+        assertThrows(AccessDeniedException.class, () -> service.deleteBudget(budgetId, differentUserId));
+        verify(repo, never()).delete(any(Budget.class));
+    }
 }
