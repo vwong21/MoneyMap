@@ -24,6 +24,18 @@ public class BudgetsService {
         if (title == null || title.isEmpty()) {
             throw new IllegalArgumentException("Title must contain a value");
         }
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than zero");
+        }
+        if (startDate == null) {
+            throw new IllegalArgumentException("Start date must not be null");
+        }
+        if (endDate == null) {
+            throw new IllegalArgumentException("End date must not be null");
+        }
+        if (!endDate.isAfter(startDate)) {
+            throw new IllegalArgumentException("End date must be after start date");
+        }
         Budget budget = new Budget(userId, categoryId, title, amount, startDate, endDate);
         repo.save(budget);
         return budget.getId();

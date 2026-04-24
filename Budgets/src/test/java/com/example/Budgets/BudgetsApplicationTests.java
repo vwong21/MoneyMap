@@ -82,4 +82,27 @@ class BudgetsApplicationTests {
                 new BigDecimal("-100.00"));
     }
 
+    @Test
+    void createBudget_NullStartDateShouldThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> service.createBudget(userId, categoryId, "Groceries", new BigDecimal("750.00"), null, endDate));
+        verify(repo, never()).save(any(Budget.class));
+    }
+
+    @Test
+    void createBudget_NullEndDateShouldThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> service.createBudget(userId, categoryId, "Groceries", new BigDecimal("750.00"), startDate, null));
+        verify(repo, never()).save(any(Budget.class));
+    }
+
+    @Test
+    void createBudget_EndDateBeforeStartDateShouldThrowIllegalArgumentException() {
+        LocalDateTime beforeStart = startDate.minusDays(1);
+        assertThrows(IllegalArgumentException.class,
+                () -> service.createBudget(userId, categoryId, "Groceries", new BigDecimal("750.00"), startDate,
+                        beforeStart));
+        verify(repo, never()).save(any(Budget.class));
+    }
+
 }
